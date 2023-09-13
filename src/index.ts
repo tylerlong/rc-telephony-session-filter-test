@@ -1,4 +1,6 @@
 import RingCentral from '@rc-ex/core';
+import WSExtension from '@rc-ex/ws';
+import waitFor from 'wait-for-async';
 
 const rc = new RingCentral({
   server: process.env.RINGCENTRAL_SERVER_URL,
@@ -10,8 +12,16 @@ const main = async () => {
   await rc.authorize({
     jwt: process.env.RINGCENTRAL_JWT_TOKEN!,
   });
-  const ext = await rc.restapi().account().extension().get();
-  console.log(JSON.stringify(ext, null, 2));
+  const wsExt = new WSExtension();
+  await rc.installExtension(wsExt);
+  const sub = await wsExt.subscribe(
+    ['/restapi/v1.0/account/~/telephony/sessions?phoneNumber=+16504308888'],
+    (event) => {
+      console.log(JSON.stringify(event, null, 2));
+    },
+  );
+  console.log(JSON.stringify(sub.subscriptionInfo));
+  await waitFor({ interval: 100000000 });
   await rc.revoke();
 };
 main();
