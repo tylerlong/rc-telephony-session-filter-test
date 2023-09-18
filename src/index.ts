@@ -20,7 +20,7 @@ const main = async () => {
       console.log(JSON.stringify(event, null, 2));
     },
   );
-  console.log(JSON.stringify(sub.subscriptionInfo));
+  console.log(JSON.stringify(sub.subscriptionInfo, null, 2));
   await waitFor({ interval: 100000000 });
   await rc.revoke();
 };
