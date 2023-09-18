@@ -15,7 +15,7 @@ const main = async () => {
   const wsExt = new WSExtension();
   await rc.installExtension(wsExt);
   const sub = await wsExt.subscribe(
-    ['/restapi/v1.0/account/~/telephony/sessions?phoneNumber=+16504308888'],
+    ['/restapi/v1.0/account/~/telephony/sessions?phoneNumber=+16504308888&direction=Inbound&statusCode=Setup'],
     (event) => {
       console.log(JSON.stringify(event, null, 2));
     },
